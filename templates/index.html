@@ -63,33 +63,31 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                <ul class="navbar-nav gap-4">
+            <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+                <ul class="navbar-nav gap-4 mx-auto">
                     <li class="nav-item"><a class="nav-link fw-semibold text-dark" href="#home">Home</a></li>
                     <li class="nav-item"><a class="nav-link fw-semibold text-dark" href="#services">Services</a></li>
                     <li class="nav-item"><a class="nav-link fw-semibold text-dark" href="#about">About</a></li>
                     <li class="nav-item"><a class="nav-link fw-semibold text-dark" href="#portfolio">Portfolio</a></li>
                     <li class="nav-item"><a class="nav-link fw-semibold text-dark" href="#contact">Contact</a></li>
                 </ul>
-            </div>
-            <div class="d-none d-lg-flex gap-2">
-                {% if session.get('loggedin') %}
-                    {% if session.get('role') == 'admin' %}
-                        <a href="/dashboard" class="btn btn-outline-danger fw-bold">Admin Dashboard</a>
+                <div class="d-flex flex-column flex-lg-row gap-2 mt-3 mt-lg-0">
+                    {% if session.get('loggedin') %}
+                        {% if session.get('role') == 'admin' %}
+                            <a href="/dashboard" class="btn btn-outline-danger fw-bold">Admin Dashboard</a>
+                        {% else %}
+                            <a href="/dashboard" class="btn btn-outline-danger fw-bold">My Dashboard</a>
+                        {% endif %}
                     {% else %}
-                        <a href="/dashboard" class="btn btn-outline-danger fw-bold">My Dashboard</a>
+                        <a href="/login" class="btn btn-outline-danger fw-bold">Login</a>
                     {% endif %}
-                {% else %}
-                    <a href="/login" class="btn btn-outline-danger fw-bold">Login</a>
-
-
-                {% endif %}
-                {% if session.get('loggedin') %}
-                    <button class="btn btn-primary-custom fw-bold" data-bs-toggle="modal"
-                        data-bs-target="#bookingModal">Booking</button>
-                {% else %}
-                    <a href="/login" class="btn btn-primary-custom fw-bold">Booking</a>
-                {% endif %}
+                    {% if session.get('loggedin') %}
+                        <button class="btn btn-primary-custom fw-bold" data-bs-toggle="modal"
+                            data-bs-target="#bookingModal">Booking</button>
+                    {% else %}
+                        <a href="/login" class="btn btn-primary-custom fw-bold">Booking</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </nav>
@@ -109,10 +107,14 @@
                         layak mendapatkan perawatan terbaik dari ahlinya.
                     </p>
                     <div class="d-flex gap-3 mt-5">
-                        <button class="btn btn-primary-custom btn-lg fw-bold px-4" data-bs-toggle="modal"
-                            data-bs-target="#bookingModal">
-                            Booking Sekarang
-                        </button>
+                        {% if session.get('loggedin') %}
+                            <button class="btn btn-primary-custom btn-lg fw-bold px-4" data-bs-toggle="modal"
+                                data-bs-target="#bookingModal">
+                                Booking Sekarang
+                            </button>
+                        {% else %}
+                            <a href="/login" class="btn btn-primary-custom btn-lg fw-bold px-4">Booking Sekarang</a>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="col-lg-6 position-relative text-center">
