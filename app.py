@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for, session
-import mysql.connector
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session, Response
+import sqlite3
 from datetime import datetime, date, timedelta
 import random
 import string
@@ -60,10 +60,11 @@ db_config = {
 
 def get_db_connection():
     try:
-        connection = mysql.connector.connect(**db_config)
+        connection = sqlite3.connect(os.environ.get('DB_NAME', 'database.db'))
+        connection.row_factory = sqlite3.Row
         return connection
-    except mysql.connector.Error as err:
-        print(f"Error connecting to MySQL: {err}")
+    except sqlite3.Error as err:
+        print(f"Error connecting to SQLite: {err}")
         return None
 
 def log_activity(user_id, role, action, target_table, target_id, old_value, new_value):
@@ -73,10 +74,10 @@ def log_activity(user_id, role, action, target_table, target_id, old_value, new_
         try:
             cursor.execute("""
                 INSERT INTO audit_logs (user_id, role, action, target_table, target_id, old_value, new_value, ip_address)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """, (user_id, role, action, target_table, target_id, old_value, new_value, request.remote_addr))
             conn.commit()
-        except mysql.connector.Error as err:
+        except sqlite3.Error as err:
             print(f"Error logging: {err}")
         finally:
             cursor.close()
@@ -94,14 +95,14 @@ def check_availability():
     if not conn:
         return jsonify({"error": "Database error"})
         
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
     
     # 1. Ambil data hari libur
     cursor.execute("SELECT tanggal, keterangan FROM holidays")
     holiday_rows = cursor.fetchall()
     holidays = {}
     for row in holiday_rows:
-        tanggal_str = row['tanggal'].strftime('%Y-%m-%d')
+        tanggal_str = row['tanggal']
         holidays[tanggal_str] = row['keterangan']
         
     # 2. Ambil data jumlah booking per hari (hanya yang tidak Batal)
@@ -114,7 +115,7 @@ def check_availability():
     booking_rows = cursor.fetchall()
     bookings = {}
     for row in booking_rows:
-        tanggal_str = row['tanggal_booking'].strftime('%Y-%m-%d')
+        tanggal_str = row['tanggal_booking']
         bookings[tanggal_str] = row['total']
         
     cursor.close()
@@ -161,8 +162,8 @@ def register():
         else:
             conn = get_db_connection()
             if conn:
-                cursor = conn.cursor(dictionary=True)
-                cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+                cursor = conn.cursor()
+                cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
                 account = cursor.fetchone()
 
                 if account:
@@ -170,7 +171,7 @@ def register():
                 else:
                     try:
                         hashed_pw = generate_password_hash(password)
-                        cursor.execute("INSERT INTO users (nama, email, no_hp, password, role) VALUES (%s, %s, %s, %s, 'customer')", (nama, email, no_hp, hashed_pw))
+                        cursor.execute("INSERT INTO users (nama, email, no_hp, password, role) VALUES (?, ?, ?, ?, 'customer')", (nama, email, no_hp, hashed_pw))
                         conn.commit()
                         new_user_id = cursor.lastrowid
                         log_activity(new_user_id, 'customer', 'Register', 'users', new_user_id, None, None)
@@ -180,7 +181,7 @@ def register():
                             window.location.href = '/login';
                         </script>
                         """
-                    except mysql.connector.Error as err:
+                    except sqlite3.Error as err:
                         error = 'Gagal mendaftar, terjadi kesalahan server.'
                     finally:
                         cursor.close()
@@ -208,8 +209,8 @@ def login():
 
         conn = get_db_connection()
         if conn:
-            cursor = conn.cursor(dictionary=True)
-            cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
             account = cursor.fetchone()
             
             cursor.close()
@@ -261,7 +262,7 @@ def submit_booking():
 
         conn = get_db_connection()
         if conn:
-            cursor = conn.cursor(dictionary=True)
+            cursor = conn.cursor()
             
             # Cek Keamanan di sisi Server: Validasi Tanggal (Tidak boleh masa lalu)
             try:
@@ -274,13 +275,13 @@ def submit_booking():
                 return "<script>alert('Gagal: Format tanggal tidak valid!'); window.history.back();</script>"
             
             # Cek Keamanan di sisi Server (Apakah kuota penuh atau hari libur?)
-            cursor.execute("SELECT * FROM holidays WHERE tanggal = %s", (tanggal_booking,))
+            cursor.execute("SELECT * FROM holidays WHERE tanggal = ?", (tanggal_booking,))
             is_holiday = cursor.fetchone()
             if is_holiday:
                 cursor.close(); conn.close()
                 return "<script>alert('Gagal: Tanggal tersebut adalah hari libur (" + is_holiday['keterangan'] + ")'); window.history.back();</script>"
                 
-            cursor.execute("SELECT COUNT(id) as total FROM bookings WHERE tanggal_booking = %s AND status != 'Batal'", (tanggal_booking,))
+            cursor.execute("SELECT COUNT(id) as total FROM bookings WHERE tanggal_booking = ? AND status != 'Batal'", (tanggal_booking,))
             current_bookings = cursor.fetchone()['total']
             if current_bookings >= MAX_BOOKING_PER_DAY:
                 cursor.close(); conn.close()
@@ -308,7 +309,7 @@ def submit_booking():
                     window.location.href = '/dashboard';
                 </script>
                 """
-            except mysql.connector.Error as err:
+            except sqlite3.Error as err:
                 print(f"Error: {err}")
                 return "Terjadi kesalahan pada server saat menyimpan data."
             finally:
@@ -330,7 +331,7 @@ def dashboard():
     
     if session['role'] == 'admin':
         if conn:
-            cursor = conn.cursor(dictionary=True)
+            cursor = conn.cursor()
             
             # Pagination and Search Setup
             page = request.args.get('page', 1, type=int)
@@ -340,7 +341,7 @@ def dashboard():
             search_query = f"%{search}%"
             
             # Count Total for Pagination
-            count_query = "SELECT COUNT(b.id) as total FROM bookings b JOIN users u ON b.user_id = u.id WHERE b.kode_booking LIKE %s OR b.nama LIKE %s OR u.no_hp LIKE %s"
+            count_query = "SELECT COUNT(b.id) as total FROM bookings b JOIN users u ON b.user_id = u.id WHERE b.kode_booking LIKE ? OR b.nama LIKE ? OR u.no_hp LIKE ?"
             cursor.execute(count_query, (search_query, search_query, search_query))
             total_records = cursor.fetchone()['total']
             total_pages = (total_records + per_page - 1) // per_page
@@ -351,9 +352,9 @@ def dashboard():
             FROM bookings b
             JOIN layanan l ON b.layanan_id = l.id
             JOIN users u ON b.user_id = u.id
-            WHERE b.kode_booking LIKE %s OR b.nama LIKE %s OR u.no_hp LIKE %s
+            WHERE b.kode_booking LIKE ? OR b.nama LIKE ? OR u.no_hp LIKE ?
             ORDER BY b.tanggal_booking DESC, b.id DESC
-            LIMIT %s OFFSET %s
+            LIMIT ? OFFSET ?
             """
             cursor.execute(query, (search_query, search_query, search_query, per_page, offset))
             bookings = cursor.fetchall()
@@ -368,12 +369,12 @@ def dashboard():
     else:
         # Tampilan Customer
         if conn:
-            cursor = conn.cursor(dictionary=True)
+            cursor = conn.cursor()
             cursor.execute("""
             SELECT b.id, b.kode_booking, b.nama, b.tanggal_booking, b.keluhan_kerusakan, b.status, l.nama_layanan 
             FROM bookings b
             JOIN layanan l ON b.layanan_id = l.id
-            WHERE b.user_id = %s
+            WHERE b.user_id = ?
             ORDER BY b.tanggal_booking DESC, b.id DESC
             """, (session['id'],))
             bookings = cursor.fetchall()
@@ -396,7 +397,7 @@ def export_bookings():
     
     conn = get_db_connection()
     if conn:
-        cursor = conn.cursor(dictionary=True)
+        cursor = conn.cursor()
         query = """
         SELECT b.kode_booking, b.nama, u.no_hp, b.tanggal_booking, l.nama_layanan, b.keluhan_kerusakan, b.status
         FROM bookings b
@@ -417,7 +418,7 @@ def export_bookings():
                 b['kode_booking'], 
                 b['nama'], 
                 b['no_hp'], 
-                b['tanggal_booking'].strftime('%Y-%m-%d'), 
+                b['tanggal_booking'], 
                 b['nama_layanan'], 
                 b['keluhan_kerusakan'], 
                 b['status']
@@ -496,18 +497,18 @@ def update_status(id):
     status_baru = request.form.get('status')
     conn = get_db_connection()
     if conn:
-        cursor = conn.cursor(dictionary=True)
+        cursor = conn.cursor()
         try:
             # Ambil status lama untuk log
-            cursor.execute("SELECT status FROM bookings WHERE id = %s", (id,))
+            cursor.execute("SELECT status FROM bookings WHERE id = ?", (id,))
             booking_lama = cursor.fetchone()
             status_lama = booking_lama['status'] if booking_lama else None
             
-            cursor.execute("UPDATE bookings SET status = %s WHERE id = %s", (status_baru, id))
+            cursor.execute("UPDATE bookings SET status = ? WHERE id = ?", (status_baru, id))
             conn.commit()
             
             log_activity(session['id'], session['role'], 'Update Status', 'bookings', id, status_lama, status_baru)
-        except mysql.connector.Error as err:
+        except sqlite3.Error as err:
             print(f"Error: {err}")
         finally:
             cursor.close()
@@ -528,11 +529,11 @@ def add_holiday():
     if conn:
         cursor = conn.cursor()
         try:
-            cursor.execute("INSERT INTO holidays (tanggal, keterangan) VALUES (%s, %s)", (tanggal, keterangan))
+            cursor.execute("INSERT INTO holidays (tanggal, keterangan) VALUES (?, ?)", (tanggal, keterangan))
             conn.commit()
             
             log_activity(session['id'], session['role'], 'Add Holiday', 'holidays', cursor.lastrowid, None, tanggal)
-        except mysql.connector.Error as err:
+        except sqlite3.Error as err:
             print(f"Error: {err}")
         finally:
             cursor.close()
@@ -549,11 +550,11 @@ def delete_holiday(id):
     if conn:
         cursor = conn.cursor()
         try:
-            cursor.execute("DELETE FROM holidays WHERE id = %s", (id,))
+            cursor.execute("DELETE FROM holidays WHERE id = ?", (id,))
             conn.commit()
             
             log_activity(session['id'], session['role'], 'Delete Holiday', 'holidays', id, None, None)
-        except mysql.connector.Error as err:
+        except sqlite3.Error as err:
             print(f"Error: {err}")
         finally:
             cursor.close()
