@@ -69,7 +69,7 @@ db_config = {
 
 def get_db_connection():
     try:
-        connection = sqlite3.connect(os.environ.get('DB_NAME', 'database.db'))
+        connection = sqlite3.connect('database.db')
         connection.row_factory = sqlite3.Row
         return connection
     except sqlite3.Error as err:
