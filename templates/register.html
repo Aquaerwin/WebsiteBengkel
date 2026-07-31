@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Akun Pelanggan - Tralala Machinery & Paint</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Tralala Machinery & Paint - Bengkel motor dan mobil terpercaya. Pelayanan profesional, cat ulang, servis mesin, dan reparasi.">
+    <meta name="keywords" content="bengkel, servis mobil, servis motor, cat ulang, ganti oli, bengkel terdekat, Tralala">
+    <meta name="author" content="Erwin Eka Pratama">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="http://127.0.0.1:5000/">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            background-color: var(--krem);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+        }
+        .login-card {
+            max-width: 450px;
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card login-card border-0 p-4 p-md-5">
+        <div class="text-center mb-4">
+            <div class="bg-danger text-white rounded p-2 d-inline-flex align-items-center justify-content-center mb-3" style="width:50px;height:50px;">
+                <i class="bi bi-person-plus-fill fs-3"></i>
+            </div>
+            <h4 class="fw-black text-dark">BUAT AKUN BARU</h4>
+            <p class="text-muted small">Daftar untuk mulai booking layanan kami</p>
+        </div>
+
+        {% if error %}
+        <div class="alert alert-danger text-center small py-2">{{ error }}</div>
+        {% endif %}
+
+        <form action="/register" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <div class="mb-3">
+                <label class="form-label fw-bold text-dark small">Nama Lengkap</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
+                    <input type="text" name="nama" class="form-control bg-light" required>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold text-dark small">Email Address</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light"><i class="bi bi-envelope"></i></span>
+                    <input type="email" name="email" class="form-control bg-light" required>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold text-dark small">No. Handphone (WhatsApp)</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light"><i class="bi bi-telephone"></i></span>
+                    <input type="text" name="no_hp" class="form-control bg-light" required>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="form-label fw-bold text-dark small">Password</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light"><i class="bi bi-lock"></i></span>
+                    <input type="password" name="password" class="form-control bg-light" required minlength="6">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary-custom w-100 fw-bold py-2 rounded-3">Daftar Sekarang</button>
+            <div class="text-center mt-3">
+                <small class="text-muted">Sudah punya akun? <a href="/login" class="text-danger fw-bold text-decoration-none">Login di sini</a></small>
+            </div>
+            <a href="/" class="btn btn-outline-secondary w-100 fw-bold py-2 rounded-3 mt-3">Kembali ke Web</a>
+        </form>
+    </div>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tralala Machinery & Paint</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Tralala Machinery & Paint - Bengkel motor dan mobil terpercaya. Pelayanan profesional, cat ulang, servis mesin, dan reparasi.">
+    <meta name="keywords" content="bengkel, servis mobil, servis motor, cat ulang, ganti oli, bengkel terdekat, Tralala">
+    <meta name="author" content="Erwin Eka Pratama">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="http://127.0.0.1:5000/">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        /* Custom Flatpickr styling */
+        .flatpickr-day.is-holiday {
+            background: #dc3545 !important;
+            border-color: #dc3545 !important;
+            color: white !important;
+        }
+        .flatpickr-day.is-full {
+            background: #6c757d !important;
+            border-color: #6c757d !important;
+            color: white !important;
+        }
+        .flatpickr-day.is-available {
+            color: #198754 !important;
+            font-weight: 600;
+        }
+        /* Past dates (disabled but not full/holiday) */
+        .flatpickr-day.flatpickr-disabled:not(.is-holiday):not(.is-full) {
+            color: #000 !important;
+            background: transparent !important;
+            opacity: 0.4;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top bg-light shadow-sm py-3">
+        <div class="container">
+            <a class="navbar-brand fw-black brand-text d-flex align-items-center gap-2" href="#">
+                <div class="bg-danger text-white rounded p-1 d-flex align-items-center justify-content-center"
+                    style="width:30px;height:30px;">
+                    <i class="bi bi-wrench-adjustable fs-6"></i>
+                </div>
+                TRALALA MACHINERY & PAINT
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav gap-4">
+                    <li class="nav-item"><a class="nav-link fw-semibold text-dark" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold text-dark" href="#services">Services</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold text-dark" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold text-dark" href="#portfolio">Portfolio</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold text-dark" href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="d-none d-lg-flex gap-2">
+                {% if session.get('loggedin') %}
+                    {% if session.get('role') == 'admin' %}
+                        <a href="/dashboard" class="btn btn-outline-danger fw-bold">Admin Dashboard</a>
+                    {% else %}
+                        <a href="/dashboard" class="btn btn-outline-danger fw-bold">My Dashboard</a>
+                    {% endif %}
+                {% else %}
+                    <a href="/login" class="btn btn-outline-danger fw-bold">Login</a>
+
+
+                {% endif %}
+                {% if session.get('loggedin') %}
+                    <button class="btn btn-primary-custom fw-bold" data-bs-toggle="modal"
+                        data-bs-target="#bookingModal">Booking</button>
+                {% else %}
+                    <a href="/login" class="btn btn-primary-custom fw-bold">Booking</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="py-5 bg-krem section-padding">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <h1 class="display-3 fw-black text-uppercase hero-title">
+                        <span class="text-gold">TRALALA</span><br>
+                        MACHINERY<br>
+                        <span class="text-danger">&</span> PAINT
+                    </h1>
+                    <p class="lead mt-4 text-muted fw-medium pe-lg-5">
+                        Perbaikan mesin profesional dan pengecatan bodi yang sempurna. Layanan Mobil dan Motor Anda
+                        layak mendapatkan perawatan terbaik dari ahlinya.
+                    </p>
+                    <div class="d-flex gap-3 mt-5">
+                        <button class="btn btn-primary-custom btn-lg fw-bold px-4" data-bs-toggle="modal"
+                            data-bs-target="#bookingModal">
+                            Booking Sekarang
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-6 position-relative text-center">
+                    <div class="hero-image-box bg-gold rounded-4 p-3 position-relative shadow-lg">
+                        <div class="floating-badge bg-white rounded-3 shadow px-3 py-2 position-absolute"
+                            style="top: 20px; left: -20px; z-index: 10;">
+                            <i class="bi bi-clock-fill text-danger me-2"></i> <span class="fw-bold">Buka</span> <span
+                                class="text-danger fw-bold">8:00 </span>
+                        </div>
+                        <!-- Hero Image -->
+                        <img src="assets/img/hero-car.jpeg" alt="Hero Car"
+                            class="img-fluid rounded-3 w-100 object-fit-cover" style="height: 500px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-5 bg-gold section-padding">
+        <div class="container">
+            <div class="row g-5">
+                <!-- Left Column -->
+                <div class="col-lg-5 d-flex flex-column">
+                    <h2 class="display-4 fw-black text-uppercase title-bordered mb-4">
+                        AHLI<br>PERBAIKAN<br><span class="text-danger">MESIN</span>
+                    </h2>
+                    <p class="fw-medium text-dark pe-lg-4 mb-4">
+                        Teknisi profesional untuk memastikan kendaraan Anda beroperasi dengan performa terbaik.
+                    </p>
+                    <div class="mt-auto">
+                        <img src="assets/img/bengkel.jpeg" alt="Mechanic working"
+                            class="img-fluid rounded-3 shadow-lg w-100 object-fit-cover" style="height: 350px;">
+                    </div>
+                </div>
+
+                <!-- Right Column (Cards) -->
+                <div class="col-lg-7">
+                    <div class="row g-4">
+                        <!-- Card 1 -->
+                        <div class="col-md-6">
+                            <div class="card h-100 border-0 rounded-4 shadow-sm service-card p-4">
+                                <div class="icon-box bg-danger-light rounded-circle mb-3 d-flex align-items-center justify-content-center"
+                                    style="width:45px; height:45px;">
+                                    <i class="bi bi-wrench-adjustable text-danger fs-5"></i>
+                                </div>
+                                <h5 class="fw-bold">Perbaikan Mesin</h5>
+                                <p class="text-muted small mb-0">Layanan diagnostik, perbaikan, dan perombakan mesin
+                                    lengkap untuk semua jenis kendaraan.</p>
+                            </div>
+                        </div>
+                        <!-- Card 2 -->
+                        <div class="col-md-6">
+                            <div class="card h-100 border-0 rounded-4 shadow-sm service-card p-4">
+                                <div class="icon-box bg-danger-light rounded-circle mb-3 d-flex align-items-center justify-content-center"
+                                    style="width:45px; height:45px;">
+                                    <i class="bi bi-droplet-half text-danger fs-5"></i>
+                                </div>
+                                <h5 class="fw-bold">Body Painting</h5>
+                                <p class="text-muted small mb-0">Pengecatan bodi kualitas premium dengan pencocokan
+                                    warna dan perbaikan goresan.</p>
+                            </div>
+                        </div>
+                        <!-- Card 3 -->
+                        <div class="col-md-6">
+                            <div class="card h-100 border-0 rounded-4 shadow-sm service-card p-4">
+                                <div class="icon-box bg-danger-light rounded-circle mb-3 d-flex align-items-center justify-content-center"
+                                    style="width:45px; height:45px;">
+                                    <i class="bi bi-gear-fill text-danger fs-5"></i>
+                                </div>
+                                <h5 class="fw-bold">Transmisi</h5>
+                                <p class="text-muted small mb-0">Layanan perbaikan dan penggantian transmisi manual dan
+                                    otomatis.</p>
+                            </div>
+                        </div>
+                        <!-- Card 4 -->
+                        <div class="col-md-6">
+                            <div class="card h-100 border-0 rounded-4 shadow-sm service-card p-4">
+                                <div class="icon-box bg-danger-light rounded-circle mb-3 d-flex align-items-center justify-content-center"
+                                    style="width:45px; height:45px;">
+                                    <i class="bi bi-shield-fill-check text-danger fs-5"></i>
+                                </div>
+                                <h5 class="fw-bold">Body Repair</h5>
+                                <p class="text-muted small mb-0">Perbaikan tabrakan, penghilangan penyok, dan restorasi
+                                    bodi lengkap.</p>
+                            </div>
+                        </div>
+                        <!-- Card 5 -->
+                        <div class="col-md-6">
+                            <div class="card h-100 border-0 rounded-4 shadow-sm service-card p-4">
+                                <div class="icon-box bg-danger-light rounded-circle mb-3 d-flex align-items-center justify-content-center"
+                                    style="width:45px; height:45px;">
+                                    <i class="bi bi-stopwatch text-danger fs-5"></i>
+                                </div>
+                                <h5 class="fw-bold">Quick Service</h5>
+                                <p class="text-muted small mb-0">Penggantian oli, servis rem, dan perawatan rutin
+                                    dilakukan dengan cepat.</p>
+                            </div>
+                        </div>
+                        <!-- Card 6 -->
+                        <div class="col-md-6">
+                            <div class="card h-100 border-0 rounded-4 shadow-sm service-card p-4">
+                                <div class="icon-box bg-danger-light rounded-circle mb-3 d-flex align-items-center justify-content-center"
+                                    style="width:45px; height:45px;">
+                                    <i class="bi bi-stars text-danger fs-5"></i>
+                                </div>
+                                <h5 class="fw-bold">Detailing</h5>
+                                <p class="text-muted small mb-0">Detailing interior dan eksterior untuk membuat mobil
+                                    Anda bersinar seperti baru.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust & Gallery Section -->
+    <section id="about" class="py-5 bg-danger text-white text-center section-padding">
+        <div class="container py-4">
+            <h2 class="display-5 fw-black text-uppercase mb-4">BENGKEL<br><span
+                    class="text-gold">TERPERCAYA</span><br>UNTUK ANDA</h2>
+            <p class="mb-5 lead fw-medium px-md-5 mx-auto" style="max-width: 800px;">
+                Kami melayani semua kendaraan dengan tingkat keahlian dan perhatian yang sama. Kendaraan Anda berada di
+                tangan yang terpercaya.
+            </p>
+
+            <div class="row text-center mb-5 pb-5 border-bottom border-light border-opacity-25">
+                <div class="col-md-4">
+                    <h3 class="display-4 fw-bold">98%</h3>
+                    <p class="fs-5">Kepuasan Pelanggan</p>
+                </div>
+                <div class="col-md-4">
+                    <h3 class="display-4 fw-bold">24/7</h3>
+                    <p class="fs-5">Layanan Darurat</p>
+                </div>
+                <div class="col-md-4">
+                    <h3 class="display-4 fw-bold">Gratis</h3>
+                    <p class="fs-5">Pemeriksaan</p>
+                </div>
+            </div>
+
+            <h3 id="portfolio" class="fw-bold mb-5 pt-4 mt-5">GALLERY PORTOFOLIO</h3>
+            <div class="row g-3">
+                <div class="col-md-3 col-6">
+                    <div class="bg-white p-2 rounded-3 shadow-sm h-100"><img src="assets/img/motor.jpg"
+                            class="img-fluid rounded-2 w-100 h-100 object-fit-cover" alt="Gallery"></div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="bg-white p-2 rounded-3 shadow-sm h-100"><img src="assets/img/motor1.jpg"
+                            class="img-fluid rounded-2 w-100 h-100 object-fit-cover" alt="Gallery"></div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="bg-white p-2 rounded-3 shadow-sm h-100"><img src="assets/img/motor2.jpg"
+                            class="img-fluid rounded-2 w-100 h-100 object-fit-cover" alt="Gallery"></div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="bg-white p-2 rounded-3 shadow-sm h-100"><img src="assets/img/pickup.jpeg"
+                            class="img-fluid rounded-2 w-100 h-100 object-fit-cover" alt="Gallery"></div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="bg-white p-2 rounded-3 shadow-sm h-100"><img src="assets/img/pickup2.jpeg"
+                            class="img-fluid rounded-2 w-100 h-100 object-fit-cover" alt="Gallery"></div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="bg-white p-2 rounded-3 shadow-sm h-100"><img src="assets/img/truck.jpeg"
+                            class="img-fluid rounded-2 w-100 h-100 object-fit-cover" alt="Gallery"></div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="bg-white p-2 rounded-3 shadow-sm h-100"><img src="assets/img/truck2.jpeg"
+                            class="img-fluid rounded-2 w-100 h-100 object-fit-cover" alt="Gallery"></div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="bg-white p-2 rounded-3 shadow-sm h-100"><img src="assets/img/truck3.jpeg"
+                            class="img-fluid rounded-2 w-100 h-100 object-fit-cover" alt="Gallery"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-black text-white pt-5 pb-4">
+        <div class="container mt-4">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h5 class="fw-bold mb-4 d-flex align-items-center gap-2">
+                        <div class="bg-danger text-white rounded p-1 d-flex align-items-center justify-content-center"
+                            style="width:25px;height:25px;">
+                            <i class="bi bi-wrench-adjustable fs-6"></i>
+                        </div>
+                        TRALALA MACHINERY & PAINT
+                    </h5>
+                    <p class="text-secondary small mb-4 pe-lg-4">Mitra terpercaya Anda untuk semua kebutuhan otomotif.
+                        Layanan perbaikan mesin dan pengecatan bodi profesional sejak 2017.</p>
+                    <div class="d-flex gap-3">
+                        <a href="https://www.facebook.com/feriyan.feriyan.90" target="_blank" class="social-icon"><i
+                                class="bi bi-facebook fs-5"></i></a>
+                        <a href="https://www.instagram.com/feriyanpamungkas141a" target="_blank" class="social-icon"><i
+                                class="bi bi-instagram fs-5"></i></a>
+                        <a href="https://www.tiktok.com/@panggil_weng" target="_blank" class="social-icon"><i
+                                class="bi bi-tiktok fs-5"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 offset-lg-1">
+                    <h6 class="fw-bold mb-4">Quick Links</h6>
+                    <ul class="list-unstyled d-flex flex-column gap-3 text-secondary small">
+                        <li><a href="#services" class="text-secondary text-decoration-none footer-link">Our Services</a>
+                        </li>
+                        <li><a href="#portfolio" class="text-secondary text-decoration-none footer-link">Portfolio</a>
+                        </li>
+                        <li><a href="#about" class="text-secondary text-decoration-none footer-link">About Us</a></li>
+                        <li><a href="/login" class="text-secondary text-decoration-none footer-link">Login /
+                                Register</a></li>
+                        <li><a href="/dashboard" class="text-secondary text-decoration-none footer-link">Cek Status
+                                Booking</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <h6 class="fw-bold mb-4">Contact Us</h6>
+                    <ul class="list-unstyled d-flex flex-column gap-3 text-secondary small">
+                        <li class="d-flex gap-3 align-items-start"><i class="bi bi-geo-alt text-danger fs-5"></i>
+                            <span>Jl. Raya Serapan 1 No.rt 4, Muntuk, Dlingo, Bantul, DIY 55783</span>
+                        </li>
+                        <li class="d-flex gap-3"><i class="bi bi-telephone text-danger fs-5"></i> <span>+62
+                                87816105528</span></li>
+                        <li class="d-flex gap-3"><i class="bi bi-envelope text-danger fs-5"></i>
+                            <span>Tralala@gmail.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-top border-secondary mt-5 pt-4 d-flex justify-content-between text-secondary small">
+                <p>&copy; 2026 TRALALA MACHINERY & PAINT. All rights reserved.</p>
+                <div class="d-flex gap-3">
+                    <a href="#" class="text-secondary text-decoration-none">Privacy Policy</a>
+                    <a href="#" class="text-secondary text-decoration-none">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Booking Modal -->
+    <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0 px-4 pt-4">
+                    <h5 class="modal-title fw-bold" id="bookingModalLabel">Form Booking Servis</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form action="/api/booking" method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-dark">Nama Lengkap</label>
+                            <input type="text" class="form-control bg-light" name="nama"
+                                placeholder="Masukkan nama Anda" required>
+                        </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-dark small">Tanggal Servis</label>
+                                <input type="text" id="tanggal_booking" name="tanggal_booking" class="form-control bg-light" placeholder="Pilih Tanggal" required>
+                                <div id="calendar-loading" class="text-primary small mt-1"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Mengecek ketersediaan jadwal...</div>
+                            </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-dark">Pilih Layanan</label>
+                            <select class="form-select bg-light" name="layanan_id" required>
+                                <option value="" disabled selected>Pilih salah satu...</option>
+                                <option value="1">Perbaikan Mesin</option>
+                                <option value="2">Body Painting</option>
+                                <option value="3">Transmisi</option>
+                                <option value="4">Body Repair</option>
+                                <option value="5">Quick Service</option>
+                                <option value="6">Detailing</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold text-dark">Keluhan Kendaraan</label>
+                            <textarea class="form-control bg-light" rows="3" name="keluhan_kerusakan"
+                                placeholder="Jelaskan masalah kendaraan Anda..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary-custom w-100 fw-bold py-2 rounded-3">Kirim
+                            Jadwal</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fetch ketersediaan dari API Backend
+            fetch('/api/availability')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('calendar-loading').style.display = 'none';
+                    
+                    const holidays = data.holidays;
+                    const bookings = data.bookings;
+                    const maxPerDay = data.max_per_day;
+                    
+                    // Buat array tanggal yang akan di-disable (Libur atau Penuh)
+                    let disabledDates = [];
+                    for (const date in holidays) {
+                        disabledDates.push(date);
+                    }
+                    for (const date in bookings) {
+                        if (bookings[date] >= maxPerDay) {
+                            disabledDates.push(date);
+                        }
+                    }
+
+                    flatpickr("#tanggal_booking", {
+                        minDate: "today",
+                        disable: disabledDates,
+                        dateFormat: "Y-m-d",
+                        onDayCreate: function(dObj, dStr, fp, dayElem) {
+                            // Format tanggal ke YYYY-MM-DD
+                            const tzoffset = (new Date()).getTimezoneOffset() * 60000;
+                            const localISOTime = (new Date(dayElem.dateObj - tzoffset)).toISOString().split('T')[0];
+                            const today = (new Date(new Date() - tzoffset)).toISOString().split('T')[0];
+                            
+                            // Abaikan tanggal yang sudah berlalu
+                            if (localISOTime < today) return;
+                            
+                            if (holidays[localISOTime]) {
+                                dayElem.classList.add('is-holiday');
+                                dayElem.title = 'Libur: ' + holidays[localISOTime];
+                            } else if (bookings[localISOTime] && bookings[localISOTime] >= maxPerDay) {
+                                dayElem.classList.add('is-full');
+                                dayElem.title = 'Penuh';
+                            } else {
+                                let booked = bookings[localISOTime] || 0;
+                                let sisa = maxPerDay - booked;
+                                dayElem.classList.add('is-available');
+                                dayElem.title = 'Tersedia: ' + sisa + ' slot';
+                            }
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error("Gagal memuat ketersediaan:", error);
+                    document.getElementById('calendar-loading').innerText = "Gagal memuat kalender. Silakan refresh.";
+                    document.getElementById('calendar-loading').className = "text-danger small mt-1";
+                });
+        });
+    </script>
+
+
+</body>
+
+
+</html>

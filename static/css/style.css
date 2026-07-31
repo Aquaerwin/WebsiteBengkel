@@ -1,0 +1,132 @@
+:root {
+    --primary-red: #D92243;
+    --gold: #EBAA33;
+    --krem: #FDF9F1;
+    --dark-black: #111111;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 90px;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--dark-black);
+    background-color: var(--krem);
+}
+
+/* Typography Utilities */
+.fw-black {
+    font-weight: 900 !important;
+}
+
+.text-danger {
+    color: var(--primary-red) !important;
+}
+
+.text-gold {
+    color: var(--gold) !important;
+}
+
+.bg-danger {
+    background-color: var(--primary-red) !important;
+}
+
+.bg-danger-light {
+    background-color: #FDF2F4 !important;
+}
+
+.bg-gold {
+    background-color: var(--gold) !important;
+}
+
+.bg-krem {
+    background-color: var(--krem) !important;
+}
+
+.bg-black {
+    background-color: var(--dark-black) !important;
+}
+
+.section-padding {
+    padding-top: 100px;
+    padding-bottom: 100px;
+}
+
+/* Custom Buttons */
+.btn-primary-custom {
+    background-color: var(--primary-red);
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-primary-custom:hover {
+    background-color: #b81c38;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(217, 34, 67, 0.3);
+    color: white;
+}
+
+.btn-outline-danger {
+    border-color: var(--primary-red);
+    color: var(--primary-red);
+    transition: all 0.3s ease;
+}
+
+.btn-outline-danger:hover {
+    background-color: var(--primary-red);
+    color: white;
+}
+
+/* Hero Section */
+.hero-title {
+    letter-spacing: -1px;
+    line-height: 1.1;
+}
+
+/* Services Section */
+.service-card {
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+/* Trust/Gallery Section */
+#gallery .border-light {
+    border-color: rgba(255,255,255,0.2) !important;
+}
+
+/* Footer Section */
+.social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255,255,255,0.1);
+    color: white;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.social-icon:hover {
+    background-color: var(--primary-red);
+    color: white;
+    transform: translateY(-3px);
+}
+
+.footer-link {
+    transition: all 0.2s ease;
+}
+
+.footer-link:hover {
+    color: var(--primary-red) !important;
+    padding-left: 5px;
+}
