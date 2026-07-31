@@ -60,16 +60,12 @@ def make_session_permanent():
 MAX_BOOKING_PER_DAY = 5
 
 # Database Configuration
-db_config = {
-    'host': os.environ.get('DB_HOST', 'localhost'),
-    'user': os.environ.get('DB_USER', 'root'),
-    'password': os.environ.get('DB_PASSWORD', ''),
-    'database': os.environ.get('DB_NAME', 'db_bengkel')
-}
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, 'database.db')
 
 def get_db_connection():
     try:
-        connection = sqlite3.connect('database.db')
+        connection = sqlite3.connect(DB_PATH)
         connection.row_factory = sqlite3.Row
         return connection
     except sqlite3.Error as err:
