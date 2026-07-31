@@ -60,6 +60,24 @@
                 </div>
                 TRALALA MACHINERY & PAINT
             </a>
+            
+            <!-- Mobile Buttons (Visible only on small screens) -->
+            <div class="d-flex align-items-center gap-2 ms-auto me-2 d-lg-none">
+                {% if session.get('loggedin') %}
+                    {% if session.get('role') == 'admin' %}
+                        <a href="/dashboard" class="btn btn-sm btn-outline-danger fw-bold">Admin</a>
+                    {% else %}
+                        <a href="/dashboard" class="btn btn-sm btn-outline-danger fw-bold">Dasbor</a>
+                    {% endif %}
+                {% else %}
+                    <a href="/login" class="btn btn-sm btn-outline-danger fw-bold">Login</a>
+                {% endif %}
+                {% if session.get('loggedin') %}
+                    <button class="btn btn-sm btn-primary-custom fw-bold" data-bs-toggle="modal" data-bs-target="#bookingModal">Booking</button>
+                {% else %}
+                    <a href="/login" class="btn btn-sm btn-primary-custom fw-bold">Booking</a>
+                {% endif %}
+            </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -71,7 +89,7 @@
                     <li class="nav-item"><a class="nav-link fw-semibold text-dark" href="#portfolio">Portfolio</a></li>
                     <li class="nav-item"><a class="nav-link fw-semibold text-dark" href="#contact">Contact</a></li>
                 </ul>
-                <div class="d-flex flex-column flex-lg-row gap-2 mt-3 mt-lg-0">
+                <div class="d-none d-lg-flex gap-2 mt-3 mt-lg-0">
                     {% if session.get('loggedin') %}
                         {% if session.get('role') == 'admin' %}
                             <a href="/dashboard" class="btn btn-outline-danger fw-bold">Admin Dashboard</a>
