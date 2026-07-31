@@ -308,7 +308,7 @@ def submit_booking():
             try:
                 sql = """
                 INSERT INTO bookings (user_id, nama, tanggal_booking, layanan_id, keluhan_kerusakan, status, kode_booking)
-                VALUES (%s, %s, %s, %s, %s, 'Pending', %s)
+                VALUES (?, ?, ?, ?, ?, 'Pending', ?)
                 """
                 val = (user_id, nama, tanggal_booking, layanan_id, keluhan_kerusakan, kode_booking)
                 cursor.execute(sql, val)

@@ -467,8 +467,16 @@
         });
     </script>
 
-
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Cek apakah ada parameter open_booking di URL
+            if (window.location.search.includes('open_booking=1')) {
+                var bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+                bookingModal.show();
+                // Bersihkan URL agar saat refresh modal tidak terbuka lagi
+                window.history.replaceState({}, document.title, "/");
+            }
+        });
+    </script>
 </body>
-
-
 </html>

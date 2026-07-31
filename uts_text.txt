@@ -1,0 +1,163 @@
+SOFTWARE PROJECT TEAM
+Ujian Tengah SemesterMata Kuliah Proyek Pemrograman (ST165)
+Nama Proyek:
+Pembuatan Website Bengkel
+“TRALALA MACHINERY & PAINT”
+Anggota Tim:
+No
+Nama Anggota
+NIM
+Role
+1
+ERWIN EKA PRATAMA
+20.11.3720
+All Role
+FAKULTAS ILMU KOMPUTER
+ UNIVERSITAS AMIKOM YOGYAKARTA
+YOGYAKARTA
+2026
+DAFTAR ISI
+PENDAHULUAN3
+1.1Latar Belakang3
+1.2Tujuan Pengembangan Sistem3
+1.3Deskripsi Singkat Sistem4
+Kebutuhan Sistem5
+2.1Identifikasi Stakeholder & User5
+2.2Functional Requirements5
+2.3Use Case Diagram6
+2.4Deskripsi Use Case (Minimal Use Case Utama)6
+2.5Non-Functional Requirements8
+Desain Sistem10
+3.1Arsitektur Sistem10
+3.2Activity Diagram11
+3.3Database Design (ERD)12
+3.4High Fidelity UI Design12
+Repository Tim13
+4.1Link Git Repository13
+4.2Screenshot Repository13
+4.3Struktur Branch13
+4.4Commit Activity14
+PENDAHULUAN
+Latar Belakang
+Perkembangan teknologi informasi dan internet yang pesat telah mengubah pola perilaku masyarakat dalam mencari informasi dan layanan. Saat ini, konsumen cenderung melakukan riset secara online terlebih dahulu sebelum memutuskan untuk menggunakan sebuah jasa. Hal ini memberikan tantangan sekaligus peluang bagi para pelaku usaha di bidang otomotif, khususnya bengkel kendaraan.
+Bengkel “Tralala Machinery & Paint” adalah sebuah bengkel mesin kendaraan motor maupun mobil, serta reparasi cat kendaraan. Selama ini, operasional bengkel seringkali masih mengandalkan sistem manual, baik dalam hal pencatatan antrean pelanggan, promosi, maupun pendokumentasian hasil kerja. Akibatnya, bengkel kesulitan untuk menjangkau target pasar yang lebih luas dan pelanggan sering mengeluhkan masalah waktu tunggu (antrean) yang tidak terprediksi di lokasi.
+Untuk mengatasi permasalahan tersebut, dibutuhkan platform digital berupa website yang tidak hanya berfungsi sebagai pusat informasi layanan, tetapi juga sebagai sarana interaktif antara pihak bengkel dan pelanggan. Melalui website ini, bengkel dapat menampilkan hasil pengerjaan (portofolio) terbaik mereka, sedangkan pelanggan dapat dengan mudah menemukan informasi, melakukan reservasi jadwal perawatan kendaraan, dan melihat penawaran menarik, sehingga pada akhirnya akan meningkatkan kredibilitas bengkel dan kepuasan pelanggan secara keseluruhan. 
+Tujuan Pengembangan Sistem
+Tujuan utama dari pengembangan sistem website bengkel ini adalah:
+Meningkatkan Jangkauan dan Visibilitas: Memperluas jangkauan pasar agar bengkel lebih mudah ditemukan oleh calon pelanggan melalui pencarian internet.
+Membangun Kredibilitas: Menampilkan citra profesional dan terpercaya dari bengkel kepada publik.
+Manajemen Jadwal Layanan: Menyediakan fitur penjadwalan (booking) yang memudahkan pelanggan dan pihak bengkel dalam mengatur antrean perbaikan atau pengecatan kendaraan secara terstruktur.
+Etalase Layanan dan Portofolio: Menyediakan galeri digital yang menampilkan daftar layanan.
+Media Promosi: Menjadi saluran yang efektif dan efisien untuk mempublikasikan diskon, promo khusus, maupun layanan terbaru kepada para pelanggan.
+Deskripsi Singkat Sistem
+Sistem yang akan dibangun adalah sebuah platform berbasis Website Profil dan Manajemen Layanan untuk sebuah bengkel mesin dan cat kendaraan. Website ini dirancang agar responsif dan mudah digunakan (dapat diakses secara optimal melalui desktop maupun mobile). Sistem ini akan memiliki dua kelompok pengguna utama, yaitu:
+Pelanggan (User): Dapat mengakses website untuk melihat profil bengkel, menjelajahi daftar layanan perawatan dan cat, melihat galeri portofolio pekerjaan, serta melakukan pemesanan/reservasi jadwal perbaikan agar tidak perlu mengantre lama di lokasi.
+Administrator Bengkel (Admin): Memiliki akses ke dashboard khusus untuk mengelola dan memperbarui data konten layanan, mengunggah foto portofolio terbaru, membuat program promosi, serta memantau dan mengelola jadwal reservasi yang masuk dari pelanggan.
+Kebutuhan Sistem
+Identifikasi Stakeholder & User
+Kategori User
+Peran / Hak Akses
+Deskripsi
+Pelanggan (User)
+Registered user / client dengan akses umum
+Masyarakat umum atau pemilik kendaraan yang menggunakan website untuk melihat portofolio bengkel, mencari informasi layanan, dan melakukan reservasi (booking) jadwal.
+Pemilik Bengkel
+Administrator
+Pemilik memegang kendali penuh atas seluruh sistem website.
+Pemilik bengkel atau staf admin yang bertugas mengelola konten website  dan juga mengatur data pemesanan jadwal dari pelanggan.
+Pembuat Website (Freelancer / Agensi)
+Developer
+Hak akses selama tahap pengembangan website
+Functional Requirements
+ID
+Nama Fitur
+Deskripsi Kebutuhan
+FR-01
+User Registrasi & Autentikasi
+memungkinkan pelanggan untuk membuat akun baru dengan memasukkan data diri (nama, email, nomor HP, dan password), serta melakukan login agar dapat mengakses fitur reservasi secara aman.
+FR-02
+Eksplorasi Profil Bengkel
+memungkinkan pelanggan (yang sudah login dan yang belum) untuk melihat halaman profil bengkel, yang mencakup informasi sejarah bengkel, alamat lokasi (terintegrasi Maps), kontak, dan jam operasional.
+FR-03
+Menjelajahi Katalog Layanan
+memungkinkan pelanggan untuk menavigasi dan membaca daftar lengkap layanan bengkel lengkap dengan deskripsi pengerjaan dan estimasi harga.
+FR-04
+Booking Jadwal
+memungkinkan pelanggan yang sudah login untuk melakukan reservasi (booking) dengan alur: memilih layanan yang diinginkan, memilih tanggal dan slot waktu, serta mengetikkan detail keluhan atau kerusakan kendaraan mereka.
+FR-05
+Pemantauan Status Booking
+memungkinkan pelanggan untuk membuka halaman riwayat pesanan untuk melacak status pengajuan booking.
+FR-06
+Pembatalan Booking
+untuk membatalkan pengajuan booking mereka sendiri secara otomatis, asalkan status pemesanan tersebut belum diproses oleh Admin
+FR-07
+Manajemen Akun
+untuk memperbarui data profil mereka sewaktu-waktu, seperti mengganti nomor telepon atau mengubah password keamanan.
+Use Case Diagram
+Deskripsi Use Case (Minimal Use Case Utama)
+Nama Use Case: Melakukan Booking Jadwal
+Aktor: Pelanggan
+Pre-condition (Syarat Awal): Pelanggan sudah menyelesaikan proses Login ke dalam sistem (sesuai relasi include).
+Main Flow (Alur Utama):
+Pelanggan menekan menu "Booking Servis" pada antarmuka website.
+Sistem menampilkan formulir pengajuan jadwal.
+Pelanggan memilih jenis layanan, memilih tanggal dan jam, serta mengisi deskripsi keluhan kerusakan kendaraan.
+Pelanggan menekan tombol "Ajukan Jadwal".
+Sistem memvalidasi kelengkapan data formulir.
+Sistem menyimpan data booking tersebut dengan status awal "Pending".
+Sistem memunculkan notifikasi sukses dan mengarahkan pelanggan ke halaman "Memantau Status Booking".
+Post-condition (Kondisi Akhir): Data reservasi pelanggan berhasil tersimpan di basis data dan masuk ke dalam antrean Dashboard Admin.
+Nama Use Case: Verifikasi & Konfirmasi Booking
+Aktor: Administrator (Admin)
+Pre-condition: Admin sudah berhasil Login dan berada di Dashboard Admin.
+Main Flow:
+Admin membuka menu "Daftar Antrean Booking".
+Sistem menampilkan seluruh data pengajuan jadwal dari pelanggan yang berstatus "Pending".
+Admin memilih salah satu pengajuan dan memeriksa jadwal ketersediaan ruang bengkel atau montir pada tanggal tersebut.
+Admin menekan tombol aksi "Setujui" (jika jadwal kosong) atau "Tolak" (jika bengkel penuh).
+Sistem memproses perubahan status tersebut dan menyimpannya.
+Post-condition: Status antrean booking telah diperbarui, dan perubahannya dapat langsung dilihat oleh pelanggan di akun mereka masing-masing.
+Nama Use Case: Kelola Data Layanan
+Aktor: Administrator (Admin)
+Pre-condition: Admin sudah berhasil Login dan berada di Dashboard Admin.
+Main Flow:
+Admin memilih menu "Manajemen Layanan".
+Sistem menampilkan tabel daftar layanan bengkel yang saat ini aktif (misal: Tune up, Overhaul, Cat Body, dll).
+Admin menekan tombol "Tambah Layanan Baru".
+Admin mengisi form detail layanan (nama layanan, deskripsi pengerjaan, dan estimasi harga).
+Admin menekan tombol "Simpan".
+Sistem memvalidasi kelengkapan teks dan menyimpannya ke database.
+Post-condition: Data layanan baru berhasil tersimpan dan langsung otomatis ditampilkan pada halaman "Melihat Profil & Layanan" di sisi publik.
+Non-Functional Requirements
+Security (Keamanan Data & Akses)
+Seluruh kata sandi (password) Pelanggan dan Admin wajib dienkripsi menggunakan metode hashing bcrypt sebelum disimpan ke dalam database. Sistem wajib menerapkan Role-Based Access Control (RBAC) secara ketat. Halaman Dashboard manajemen terkunci mutlak hanya untuk otorisasi Admin, dan secara otomatis memblokir semua upaya akses dari akun Pelanggan maupun tamu yang tidak dikenali.
+Performance (Kinerja & Kecepatan)
+Sistem wajib memberikan waktu respons maksimal 3 detik untuk setiap interaksi dari pengguna. Secara spesifik, halaman "Galeri Portofolio" yang memuat aset foto resolusi tinggi wajib termuat sepenuhnya di bawah batas waktu 3 detik melalui implementasi algoritma kompresi gambar otomatis dan teknik lazy loading.
+Usability (Kemudahan Penggunaan & Antarmuka)
+Antarmuka (User Interface) sistem wajib dibangun menggunakan pendekatan Responsive Web Design (RWD). Tata letak seluruh elemen, katalog layanan, dan formulir pengajuan booking terkonfigurasi untuk beradaptasi secara otomatis pada dimensi layar perangkat desktop, tablet, maupun smartphone guna menjamin keterbacaan dan presisi navigasi.
+Availability (Ketersediaan Layanan)
+Sistem website wajib beroperasi di peladen (cloud server) dengan jaminan uptime 99,9%. Sistem ini beroperasi secara penuh 24 jam sehari, 7 hari seminggu, untuk memastikan penerimaan data registrasi dan pengajuan jadwal servis dari pelanggan secara terus-menerus tanpa terputus oleh jam operasional fisik bengkel.
+Data Integrity (Integritas Data)
+Sistem basis data wajib mengimplementasikan penguncian transaksi (transaction locking) untuk mencegah insiden tumpang tindih data (race condition). Sistem memproses setiap perintah masukan secara berurutan (sequential) untuk menjamin tidak ada kerusakan (corrupt) atau duplikasi entri data ketika terjadi lebih dari satu aksi pengajuan booking pada rentang detik yang bersamaan.
+Desain Sistem
+Arsitektur Sistem
+Sistem website bengkel ini dirancang menggunakan arsitektur perangkat lunak berbasis Klien-Server (Pemisahan Tampilan dan Mesin Pemroses). Pendekatan ini dipilih agar tampilan visual pengguna terpisah dari kode pemrosesan data, sehingga sistem menjadi lebih ringan, rapi, dan alur kerjanya jauh lebih mudah dipahami oleh pengembang pemula. Secara teknis, sistem ini dibagi ke dalam tiga lapisan (komponen) utama:
+Lapisan Tampilan Layar (Klien) Lapisan ini bertugas menampilkan desain halaman yang akan dilihat dan ditekan langsung oleh Pelanggan maupun Admin. Bagian ini dibangun menggunakan bahasa penyusun halaman web standar (HTML, CSS, dan JavaScript), serta dibantu oleh kerangka kerja bawaan bernama Bootstrap. Bootstrap dipilih karena sangat memudahkan pembuat web pemula untuk menciptakan desain web responsif, yaitu tampilan yang bisa menyusun dan merapikan dirinya sendiri secara otomatis ketika dibuka lewat layar komputer, layar tablet, maupun layar telepon seluler (smartphone).
+Lapisan Logika Sistem (Peladen/Server) Lapisan ini bertugas memeriksa kebenaran sandi pengguna, mengatur jadwal antrean bengkel, dan menjalankan sistem booking. Bagian ini dibangun menggunakan bahasa pemrograman Python (yang sintaksnya sangat ramah untuk pemula), dipadukan dengan Flask (sebuah kerangka kerja pembuat server yang ringan).
+Lapisan Penyimpanan Data (Basis Data) berfungsi sebagai media penyimpanan utama untuk seluruh data bengkel agar tidak hilang saat komputer dimatikan. Lapisan ini menampung data akun pengguna, daftar riwayat pesanan, dan foto portofolio. Sistem ini menggunakan basis data MySQL yang populer di kalangan mahasiswa, pengelolaannya mudah, dan mampu menjaga keteraturan table.
+Activity Diagram
+Database Design (ERD)
+High Fidelity UI Design
+Repository Tim
+Link Git Repository
+URL: https://github.com/Aquaerwin/WebsiteBengkel
+Screenshot Repository
+Struktur Branch
+Dalam pengembangan sistem Website Bengkel ini, menerapkan strategi percabangan (branching strategy) standar Git untuk mengisolasi pengerjaan kode dan menghindari konflik (code conflict). 
+main (Production Branch)
+Merupakan cabang utama. Kode yang berada di cabang ini dijaga ketat kestabilannya. Hanya kodingan yang sudah selesai, berfungsi 100%, dan bebas error yang akan saya gabungkan (merge) ke cabang ini, karena cabang ini adalah versi final yang akan didemonstrasikan untuk penilaian.
+Feature (Feature Branch)
+Sebagai pengembang tunggal (Full-Stack), saya memisahkan fokus pengerjaan ke dalam beberapa cabang eksperimental agar lebih teratur. Contoh cabang yang saya gunakan:
+feature/frontend: Digunakan khusus saat saya sedang merancang antarmuka (HTML/CSS/Bootstrap).
+feature/backend: Digunakan khusus saat saya membangun logika server (Flask) dan database (MySQL).
+Commit Activity
