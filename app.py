@@ -20,6 +20,15 @@ load_dotenv()
 app = Flask(__name__, static_url_path='', static_folder='static')
 app.secret_key = os.environ.get('SECRET_KEY', os.urandom(24))
 
+@app.template_filter('formatdate')
+def formatdate(value, format='%d-%m-%Y'):
+    if isinstance(value, str):
+        try:
+            return datetime.strptime(value, '%Y-%m-%d').strftime(format)
+        except ValueError:
+            return value
+    return value.strftime(format)
+
 # Security Configurations
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
@@ -216,17 +225,21 @@ def login():
             cursor.close()
             conn.close()
 
-            if account and check_password_hash(account['password'], password):
-                session['loggedin'] = True
-                session['id'] = account['id']
-                session['nama'] = account.get('nama', '')
-                session['email'] = account['email']
-                session['no_hp'] = account.get('no_hp', '')
-                session['role'] = account['role']
-                
-                log_activity(account['id'], account['role'], 'Login', 'users', account['id'], None, None)
-                
-                return redirect(url_for('dashboard'))
+            if account:
+                account_dict = dict(account)
+                if check_password_hash(account_dict['password'], password):
+                    session['loggedin'] = True
+                    session['id'] = account_dict['id']
+                    session['nama'] = account_dict.get('nama', '')
+                    session['email'] = account_dict['email']
+                    session['no_hp'] = account_dict.get('no_hp', '')
+                    session['role'] = account_dict['role']
+                    
+                    log_activity(account_dict['id'], account_dict['role'], 'Login', 'users', account_dict['id'], None, None)
+                    
+                    return redirect(url_for('dashboard'))
+                else:
+                    error = 'Email atau Password salah!'
             else:
                 error = 'Email atau Password salah!'
         else:

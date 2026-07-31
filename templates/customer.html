@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Dashboard - Tralala Machinery & Paint</title>
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Tralala Machinery & Paint - Bengkel motor dan mobil terpercaya. Pelayanan profesional, cat ulang, servis mesin, dan reparasi.">
-    <meta name="keywords" content="bengkel, servis mobil, servis motor, cat ulang, ganti oli, bengkel terdekat, Tralala">
+    <meta name="description"
+        content="Tralala Machinery & Paint - Bengkel motor dan mobil terpercaya. Pelayanan profesional, cat ulang, servis mesin, dan reparasi.">
+    <meta name="keywords"
+        content="bengkel, servis mobil, servis motor, cat ulang, ganti oli, bengkel terdekat, Tralala">
     <meta name="author" content="Erwin Eka Pratama">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="http://127.0.0.1:5000/">
@@ -19,13 +22,15 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body class="bg-light">
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg bg-black text-white shadow-sm py-3">
         <div class="container">
             <a class="navbar-brand fw-black text-white d-flex align-items-center gap-2" href="/">
-                <div class="bg-danger text-white rounded p-1 d-flex align-items-center justify-content-center" style="width:30px;height:30px;">
+                <div class="bg-danger text-white rounded p-1 d-flex align-items-center justify-content-center"
+                    style="width:30px;height:30px;">
                     <i class="bi bi-wrench-adjustable fs-6"></i>
                 </div>
                 TRALALA
@@ -42,13 +47,16 @@
     <!-- Main Content -->
     <div class="container py-5">
         <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
-            <h4 class="fw-bold mb-0 text-dark"><i class="bi bi-person-lines-fill text-gold me-2"></i> Dasbor Pelanggan</h4>
+            <h4 class="fw-bold mb-0 text-dark"><i class="bi bi-person-lines-fill text-gold me-2"></i> Dasbor Pelanggan
+            </h4>
             <div>
-                <a href="https://wa.me/{{ admin_no_hp }}" target="_blank" class="btn btn-success fw-bold me-2 shadow-sm">
+                <a href="https://wa.me/{{ admin_no_hp }}" target="_blank"
+                    class="btn btn-success fw-bold me-2 shadow-sm">
                     <i class="bi bi-whatsapp"></i> Chat Admin
                 </a>
                 <a href="/" class="btn btn-outline-dark fw-bold me-2"><i class="bi bi-house"></i> Home</a>
-                <a href="/logout" class="btn btn-danger fw-bold shadow-sm"><i class="bi bi-box-arrow-right"></i> Keluar</a>
+                <a href="/logout" class="btn btn-danger fw-bold shadow-sm"><i class="bi bi-box-arrow-right"></i>
+                    Keluar</a>
             </div>
         </div>
 
@@ -62,25 +70,27 @@
                                 <th class="py-3">Tanggal Servis</th>
                                 <th class="py-3">Layanan</th>
                                 <th class="py-3">Keluhan</th>
-                                <th class="py-3">Status Mobil</th>
+                                <th class="py-3">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for booking in bookings %}
                             <tr>
                                 <td class="px-4 fw-bold text-secondary">#{{ booking.kode_booking }}</td>
-                                <td>{{ booking.tanggal_booking.strftime('%d-%m-%Y') }}</td>
+                                <td>{{ booking.tanggal_booking|formatdate }}</td>
                                 <td><span class="badge bg-gold text-dark">{{ booking.nama_layanan }}</span></td>
-                                <td class="small text-muted" style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ booking.keluhan_kerusakan }}">
+                                <td class="small text-muted"
+                                    style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                    title="{{ booking.keluhan_kerusakan }}">
                                     {{ booking.keluhan_kerusakan }}
                                 </td>
                                 <td>
                                     {% if booking.status == 'Pending' %}
-                                        <span class="badge bg-danger">Menunggu Antrian</span>
+                                    <span class="badge bg-danger">Menunggu Antrian</span>
                                     {% elif booking.status == 'Proses' %}
-                                        <span class="badge bg-primary">Sedang Dikerjakan</span>
+                                    <span class="badge bg-primary">Sedang Dikerjakan</span>
                                     {% else %}
-                                        <span class="badge bg-success">{{ booking.status }}</span>
+                                    <span class="badge bg-success">{{ booking.status }}</span>
                                     {% endif %}
                                 </td>
                             </tr>

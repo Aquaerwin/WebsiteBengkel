@@ -91,7 +91,7 @@
                                     </a>
                                     {% endif %}
                                 </td>
-                                <td>{{ booking.tanggal_booking.strftime('%d-%m-%Y') }}</td>
+                                <td>{{ booking.tanggal_booking|formatdate }}</td>
                                 <td><span class="badge bg-gold text-dark">{{ booking.nama_layanan }}</span></td>
                                 <td class="small text-muted" style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ booking.keluhan_kerusakan }}">
                                     {{ booking.keluhan_kerusakan }}
@@ -190,7 +190,7 @@
                         <tbody>
                             {% for h in holidays %}
                             <tr>
-                                <td class="fw-bold text-danger">{{ h.tanggal.strftime('%d-%m-%Y') }}</td>
+                                <td class="fw-bold text-danger">{{ h.tanggal|formatdate }}</td>
                                 <td>{{ h.keterangan }}</td>
                                 <td>
                                     <form action="/admin/delete_holiday/{{ h.id }}" method="POST" class="d-inline">
